@@ -13,7 +13,7 @@ To install the chart with the release name `flagr`:
 helm repo add flagr https://ericbsantana.github.io/flagr-helm-chart
 ```
 ```bash
-helm install flagr flagr/flagr
+helm install flagr flagr/flagr --devel
 ```
 
 ## Maintainers
