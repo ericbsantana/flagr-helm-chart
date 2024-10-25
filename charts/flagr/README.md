@@ -20,7 +20,7 @@ helm install flagr flagr/flagr --devel
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Eric Santana | <bitencourteric@hotmail.com> | <https://ericbsantana.com> |
+| ericbsantana | <bitencourteric@hotmail.com> | <https://ericbsantana.com> |
 
 ## Values
 
