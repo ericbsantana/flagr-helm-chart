@@ -86,4 +86,21 @@ entries:
     urls:
     - https://github.com/ericbsantana/flagr-helm-chart/releases/download/flagr-1.17.0-alpha/flagr-1.17.0-alpha.tgz
     version: 1.17.0-alpha
-generated: "2024-10-25T08:04:01.287119038Z"
+  - apiVersion: v2
+    appVersion: 1.17.0
+    created: "2024-10-25T09:25:35.639826185Z"
+    description: A Helm chart for Flagr, a feature flagging and configuration management
+      platform.
+    digest: aade9a0459a0ab2ae57986f1880e4a60f2c667dddb9d75b0c18ec64b6f03e9a7
+    maintainers:
+    - email: bitencourteric@hotmail.com
+      name: ericbsantana
+      url: https://ericbsantana.com
+    name: flagr
+    sources:
+    - https://github.com/ericbsantana/flagr-helm-chart
+    type: application
+    urls:
+    - https://github.com/ericbsantana/flagr-helm-chart/releases/download/flagr-1.17.0-alpha/flagr-1.17.0-alpha.tgz
+    version: 1.17.0-alpha
+generated: "2024-10-25T09:25:35.639871672Z"
