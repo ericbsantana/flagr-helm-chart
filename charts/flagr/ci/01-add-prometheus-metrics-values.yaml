@@ -1,0 +1,5 @@
+extraEnvs:
+  - name: FLAGR_PROMETHEUS_ENABLED
+    value: "true"
+  - name: FLAGR_PROMETHEUS_PATH
+    value: "/metrics"

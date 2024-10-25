@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-metrics-test"
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  containers:
+    - name: metrics-test
+      image: curlimages/curl:8.1.2
+      command: ['/bin/sh', '-c']
+      args:
+        - |
+          metrics_enabled="false"
+          metrics_path="/metrics"
+          
+          {{- range .Values.extraEnvs }}
+          {{- if eq .name "FLAGR_PROMETHEUS_ENABLED" }}
+          metrics_enabled="{{ .value }}"
+          {{- end }}
+          {{- if eq .name "FLAGR_PROMETHEUS_PATH" }}
+          metrics_path="{{ .value }}"
+          {{- end }}
+          {{- end }}
+          
+          if [ "$metrics_enabled" != "true" ]; then
+            echo "Prometheus metrics are not enabled (FLAGR_PROMETHEUS_ENABLED is not true)"
+            exit 0
+          fi
+          
+          response=$(curl -s -w "\n%{http_code}" http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}${metrics_path})
+          
+          response_body=$(echo "$response" | sed '$d')
+          response_code=$(echo "$response" | tail -n1)
+          
+          if echo "$response_body" | grep -q "404 Not Found"; then
+            echo "Metrics endpoint returned 404 Not Found at path: ${metrics_path}"
+            exit 1
+          fi
+                    
+          echo "Metrics endpoint test passed successfully"
+          exit 0
+  restartPolicy: Never
