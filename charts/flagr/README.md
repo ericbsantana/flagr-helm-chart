@@ -3,7 +3,7 @@
 
 A Helm chart for Flagr, a feature flagging and configuration management platform.
 
-![Version: 1.17.0-alpha](https://img.shields.io/badge/Version-1.17.0--alpha-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.17.0](https://img.shields.io/badge/AppVersion-1.17.0-informational?style=flat-square)
+![Version: 1.17.0-beta](https://img.shields.io/badge/Version-1.17.0--beta-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.17.0](https://img.shields.io/badge/AppVersion-1.17.0-informational?style=flat-square)
 
 ## Installing the Chart
 
