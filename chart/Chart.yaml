@@ -3,7 +3,7 @@ name: flagr
 description: A Helm chart for Flagr, a feature flagging and configuration management platform.
 type: application
 
-version: 1.17.0-beta
+version: 1.17.0-alpha
 appVersion: "1.17.0"
 
 maintainers:
