@@ -1,6 +1,6 @@
 # Helm chart for Flagr
 
-This is a Helm chart for Flagr, a feature flagging and configuration management platform.
+This is a Helm chart for [Flagr](https://github.com/openflagr/flagr), a feature flagging and configuration management platform.
 
 ## Installing the Chart
 
