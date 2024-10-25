@@ -1,0 +1,7 @@
+extraEnvs:
+  - name: FLAGR_BASIC_AUTH_ENABLED
+    value: "true"
+  - name: FLAGR_BASIC_AUTH_USERNAME
+    value: "ludwigwittgenstein"
+  - name: FLAGR_BASIC_AUTH_PASSWORD
+    value: "gottlobfrege"

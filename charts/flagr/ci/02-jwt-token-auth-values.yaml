@@ -1,0 +1,7 @@
+extraEnvs:
+  - name: FLAGR_JWT_AUTH_ENABLED
+    value: "true"
+  - name: FLAGR_JWT_AUTH_SECRET
+    value: "guineapig"
+  - name: FLAGR_JWT_AUTH_NO_TOKEN_STATUS_CODE
+    value: "401"

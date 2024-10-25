@@ -1,0 +1,110 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-jwt-auth-test"
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  volumes:
+    - name: shared-token
+      emptyDir: {}
+  initContainers:
+    - name: jwt-generator
+      image: bitnami/jwt-cli:latest
+      volumeMounts:
+        - name: shared-token
+          mountPath: /tokens
+      command: ['/bin/sh', '-c']
+      args:
+        - |
+          auth_enabled="false"
+          jwt_secret=""
+          
+          {{- range .Values.extraEnvs }}
+          {{- if eq .name "FLAGR_JWT_AUTH_ENABLED" }}
+          auth_enabled="{{ .value }}"
+          {{- end }}
+          {{- if eq .name "FLAGR_JWT_AUTH_SECRET" }}
+          jwt_secret="{{ .value }}"
+          {{- end }}
+          {{- end }}
+                    
+          if [ "$auth_enabled" != "true" ]; then
+            echo "FLAGR_JWT_AUTH_ENABLED is false, thus bypassing test"
+            exit 0
+          fi
+          
+          if [ -z "$jwt_secret" ]; then
+            echo "FLAGR_JWT_AUTH_SECRET is empty, thus bypassing test"
+            exit 0
+          fi
+          
+          jwt encode \
+            --alg HS256 \
+            --secret "$jwt_secret" \
+            --iss helm-test \
+            --sub test-user \
+            > /tokens/valid_token
+          
+          jwt encode \
+            --alg HS256 \
+            --secret "wrong_secret" \
+            --iss helm-test \
+            --sub test-user \
+            > /tokens/invalid_token
+          
+          echo "JWT tokens generated successfully"
+  containers:
+    - name: curl-test
+      image: curlimages/curl:8.1.2
+      volumeMounts:
+        - name: shared-token
+          mountPath: /tokens
+      command: ['/bin/sh', '-c']
+      args:
+        - |
+          auth_enabled="false"
+          jwt_secret=""
+          
+          {{- range .Values.extraEnvs }}
+          {{- if eq .name "FLAGR_JWT_AUTH_ENABLED" }}
+          auth_enabled="{{ .value }}"
+          {{- end }}
+          {{- if eq .name "FLAGR_JWT_AUTH_SECRET" }}
+          jwt_secret="{{ .value }}"
+          {{- end }}
+          {{- end }}
+                    
+          if [ "$auth_enabled" != "true" ]; then
+            echo "FLAGR_JWT_AUTH_ENABLED is false, thus bypassing test"
+            exit 0
+          fi
+          
+          if [ -z "$jwt_secret" ]; then
+            echo "FLAGR_JWT_AUTH_SECRET is empty, thus bypassing test"
+            exit 0
+          fi
+          
+          valid_token=$(cat /tokens/valid_token)
+          response_code=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $valid_token" \
+            http://{{ .Release.Name }}.{{ .Release.Namespace }}:{{ .Values.service.port }}/api/v1/flags)
+          
+          echo "Response code with valid JWT: ${response_code}"
+          
+          if [ "$response_code" -lt 200 ] || [ "$response_code" -ge 300 ]; then
+            echo "Endpoint returned unexpected status code: $response_code"
+            exit 1
+          fi
+          
+          invalid_token=$(cat /tokens/invalid_token)
+          response_code=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $invalid_token" \
+            http://{{ .Release.Name }}.{{ .Release.Namespace }}:{{ .Values.service.port }}/api/v1/flags)
+          
+          echo "Response code with invalid JWT: ${response_code}"
+          
+          echo "JWT authentication test passed successfully"
+          exit 0
+  restartPolicy: Never
