@@ -9,6 +9,7 @@ appVersion: "1.17.0"
 maintainers:
   - name: Eric Santana
     email: bitencourteric@hotmail.com
+    url: https://ericbsantana.com
 
 sources:
   - https://github.com/ericbsantana/flagr-helm-chart
